@@ -14,7 +14,7 @@
 </h3>
 
 ## Overview
-<img src="readme_figures/PGA_overview.png" width="40%" align="middle"><br><br>
+<img src="readme_figures/IROS_demo.gif" width="100%" align="middle"><br><br>
 
 Citation
 -----------------------------
