@@ -2,15 +2,15 @@
 <figure>
     <img src="readme_figures/PGA-Tour-Logo.png" width="90" height="70">
 </figure>
-<h1>GVCCI: Lifelong Learning of Visual Grounding <br> for Language-Guided Robotic Manipulation</h1>
+<h1>PGA: Personalizing Grasping Agents with Single Human-Robot Interaction</h1>
   
-**[Junghyun Kim][4], &nbsp; [Gi-Cheon Kang][3]<sup>\*</sup>, &nbsp; [Jaein Kim][5]<sup>\*</sup>, &nbsp; [Suyeon Shin][7], &nbsp; [Byoung-Tak Zhang][6]** <br>
+**[Junghyun Kim][4], &nbsp; [Gi-Cheon Kang][3]<sup>\*</sup>, &nbsp; [Jaein Kim][5]<sup>\*</sup>, &nbsp; [Seoyun Yang][1], &nbsp; [Minjoon Jung][1], &nbsp; [Byoung-Tak Zhang][6]** <br>
 
-**[The 2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2023)][2]**
+**[Submitted to The 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2024)][2]**
 </div>
 
 <h3 align="center">
-<a href="https://arxiv.org/abs/2307.05963">arXiv</a> | <a href="https://drive.google.com/file/d/1QO_ElVKPAxTQo6-pmuHihGgp23WkyBjp/view?usp=sharing">Poster</a> | <a href="https://drive.google.com/file/d/1PeWlImlTqXNKS1N0li2fO9xptHlozCVq/view?usp=sharing">Presentation Video</a> | <a href="https://drive.google.com/file/d/1DfGMTGrifpXlsp_0Y2XbxmNR4VDlRM1u/view?usp=sharing">Demo Video</a>
+<a href="https://arxiv.org/abs/2310.12547">arXiv</a> | <a href="https://drive.google.com">Poster (TBD)</a> | <a href="https://drive.google.com">Presentation Video (TBD)</a> | <a href="https://drive.google.com/file/d/19u1qsj27nRtMjNm-qS7syq_RuyTQxO42/view?usp=sharing">1 min Demo Video</a>
 </h3>
 
 ## Overview
@@ -260,7 +260,7 @@ This repo is built on [Bottom-Up Attention](https://github.com/MILVLG/bottom-up-
 
 
 [1]: https://arxiv.org/abs/2307.05963
-[2]: https://ieee-iros.org/
+[2]: https://iros2024-abudhabi.org/
 [3]: https://gicheonkang.com
 [4]: https://github.com/JHKim-snu/
 [5]: https://github.com/qpwodlsqp/
