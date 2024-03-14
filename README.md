@@ -1,6 +1,6 @@
 <div align="center">
 <figure>
-    <img src="readme_figures/PGA-Tour-Logo.png" width="50" height="70">
+    <img src="readme_figures/PGA-Tour-Logo.png" width="90" height="70">
 </figure>
 <h1>GVCCI: Lifelong Learning of Visual Grounding <br> for Language-Guided Robotic Manipulation</h1>
   
