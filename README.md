@@ -14,16 +14,16 @@
 </h3>
 
 ## Overview
-<img src="readme_figures/GVCCI_demo_video.gif" width="100%" align="middle"><br><br>
+<img src="readme_figures/PGA_overview.png" width="60%" align="middle"><br><br>
 
 Citation
 -----------------------------
 If you use this code or data in your research, please consider citing:
 ```bibtex
-@article{kim2023gvcci,
-  title={Gvcci: Lifelong learning of visual grounding for language-guided robotic manipulation},
-  author={Kim, Junghyun and Kang, Gi-Cheon and Kim, Jaein and Shin, Suyeon and Zhang, Byoung-Tak},
-  journal={arXiv preprint arXiv:2307.05963},
+@article{kim2023pga,
+  title={PGA: Personalizing Grasping Agents with Single Human-Robot Interaction},
+  author={Kim, Junghyun and Kang, Gi-Cheon and Kim, Jaein and Yang, Seoyun and Jung, Minjoon and Zhang, Byoung-Tak},
+  journal={arXiv preprint arXiv:2310.12547},
   year={2023}
 }
 ```
