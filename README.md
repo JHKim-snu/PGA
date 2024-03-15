@@ -28,11 +28,10 @@ If you use this code or data in your research, please consider citing:
 }
 ```
 
-<!--
 ## Table of Contents
-* [Setup and Dependencies](#Setup-and-Dependencies)
-* [Download Data](#Download-Data)
-* [Pre-trained Checkpoints](#Pre-trained-Checkpoints)
+* [Environment Setup](#Environment Setup)
+* [GraspMine Dataset](#GraspMine Dataset)
+* [Reminiscence Construction](#Reminiscence Construction)
 * [Training](#Training)
 * [Adaptation to Discriminative Visual Dialog](#Adaptation-to-Discriminative-Visual-Dialog)
 * [Visual Dialog Generation](#Visual-Dialog-Generation)
@@ -41,7 +40,6 @@ If you use this code or data in your research, please consider citing:
 * [Demo](#Demo)
 * [Acknowledgements](#Acknowledgements)
 * [License](#License)<br><br>
--->
 
 <br>
 
