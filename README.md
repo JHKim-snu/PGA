@@ -29,18 +29,16 @@ If you use this code or data in your research, please consider citing:
 ```
 
 ## Table of Contents
-* [Environment Setup](#Environment Setup)
 * [Environment Setup](#Environment-Setup)
-* [GraspMine Dataset](#GraspMine Dataset)
-* [Reminiscence Construction](#Reminiscence Construction)
-* [Training](#Training)
-* [Adaptation to Discriminative Visual Dialog](#Adaptation-to-Discriminative-Visual-Dialog)
-* [Visual Dialog Generation](#Visual-Dialog-Generation)
-* [Evaluation](#Evaluation)
-* [Adversarial Robustness Study](#Adversarial-Robustness-Study)
-* [Demo](#Demo)
+* [GraspMine Dataset](#GraspMine-Dataset)
+* [Reminiscence Construction](#Reminiscence-Construction)
+* [Object Information Acquisition](#Object-Information-Acquisition)
+* [Propagation through Reminiscence](#Propagation-through-Reminiscence)
+* [Personalized Object Grounding Model](#Personalized-Object-Grounding-Model)
+* [Personalized Object Grasping](#Personalized-Object-Grasping)
+* [Experimental Results](#Experimental-Results)
 * [Acknowledgements](#Acknowledgements)
-* [License](#License)<br><br>
+* 
 
 <br>
 
