@@ -85,14 +85,6 @@ The reminiscence consists of 400 raw images of the environment.
 
 #### Test Set
 
-The test set comprises five distinct splits:
-
-- **Heterogeneous Split**: Scenes with randomly selected objects, making up 60 images with 120 personal indicators and bounding boxes.
-- **Homogeneous Split**: Scenes with similar-looking objects of the same category, presenting a challenge for discrimination, with 60 images featuring 120 indicators and bounding boxes.
-- **Cluttered Split**: Contains 106 images with highly cluttered objects sourced from the IM-Dial dataset~\cite{prograsp}, each featuring a single personal indicator and bounding box per image.
-- **Paraphrased Split**: Includes all samples from the Heterogeneous, Homogeneous, and Cluttered splits, with each personal indicator paraphrased by annotators.
-- **Generic Split**: Sourced from the \textit{VGPI} dataset presented in GVCCI~\cite{gvcci}, we utilized the Test-E split, aligning with our environmental settings.
-
 Each sample in the test set includes:
 1. Images containing multiple objects.
 2. A natural language personal indicator.
@@ -109,15 +101,15 @@ Each sample in the test set includes:
 | `0.tsv`  | 0 | 0 | 0 MBytes | [Download]()|
 
 **Test Set**
-| Name  | Content | Examples | Size | Link |
-| --- | --- |--- | --- |--- |
-| `heterogeneous.zip`  | Images of Heterogeneous split | 60 | 19.1 MBytes | [Download](https://drive.google.com/file/d/1asQ4mdsz1QenI90R51Xmo7-Bx2ZHTpVS/view?usp=sharing)|
-| `homogeneous.zip`  | Images of Homogeneous split | 60 | 18.6 MBytes | [Download](https://drive.google.com/file/d/1an8IKAVT0UBE0K9Hq5NbXApgvoCkZPhu/view?usp=sharing)|
-| `cluttered.zip`  | Images of Cluttered split | 106 | 36.6 MBytes | [Download](https://drive.google.com/file/d/1Y99XBJrXGw491ULXnf_JUiwTdL8Pzlob/view?usp=sharing)|
-| `heterogeneous.pth`  | Annotations for Heterogeneous images | 120 | 12 KBytes | [Download]()|
-| `homogeneous.pth`  | Annotations for Homogeneous images | 120 | 12 KBytes | [Download]()|
-| `cluttered.pth`  | Annotations for Cluttered images | 106 | 32 KBytes | [Download]()|
-| `paraphrased.pth`  | Paraphrased annotations for all splits | 346 | 49 KBytes | [Download]()|
+| Name  | Content | Examples | Size | Link | Description |
+| --- | --- |--- | --- |--- |--- |
+| `heterogeneous.zip`  | Images of Heterogeneous split | 60 | 19.1 MBytes | [Download](https://drive.google.com/file/d/1asQ4mdsz1QenI90R51Xmo7-Bx2ZHTpVS/view?usp=sharing)| Scenes with randomly selected objects|
+| `homogeneous.zip`  | Images of Homogeneous split | 60 | 18.6 MBytes | [Download](https://drive.google.com/file/d/1an8IKAVT0UBE0K9Hq5NbXApgvoCkZPhu/view?usp=sharing)| Scenes with similar-looking objects of the same category|
+| `cluttered.zip`  | Images of Cluttered split | 106 | 36.6 MBytes | [Download](https://drive.google.com/file/d/1Y99XBJrXGw491ULXnf_JUiwTdL8Pzlob/view?usp=sharing)| highly cluttered objects. Sourced from the IM-Dial dataset|
+| `heterogeneous.pth`  | Annotations for Heterogeneous images | 120 | 12 KBytes | [Download]()||
+| `homogeneous.pth`  | Annotations for Homogeneous images | 120 | 12 KBytes | [Download]()||
+| `cluttered.pth`  | Annotations for Cluttered images | 106 | 32 KBytes | [Download]()||
+| `paraphrased.pth`  | Paraphrased annotations for all splits | 346 | 49 KBytes | [Download]()| Each personal indicator paraphrased by annotators|
 
 
 Each line in ... as shown below.
