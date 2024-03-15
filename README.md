@@ -30,6 +30,7 @@ If you use this code or data in your research, please consider citing:
 
 ## Table of Contents
 * [Environment Setup](#Environment Setup)
+* [Environment Setup](#Environment-Setup)
 * [GraspMine Dataset](#GraspMine Dataset)
 * [Reminiscence Construction](#Reminiscence Construction)
 * [Training](#Training)
