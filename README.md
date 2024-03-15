@@ -38,7 +38,7 @@ If you use this code or data in your research, please consider citing:
 * [Personalized Object Grasping](#Personalized-Object-Grasping)
 * [Experimental Results](#Experimental-Results)
 * [Acknowledgements](#Acknowledgements)
-* 
+
 
 <br>
 
@@ -67,7 +67,8 @@ pip install -r requirements.txt
 GraspMine Dataset
 ----------------------
 GraspMine is an LCRG (Language-Guided Robotic Grasping) dataset collected to validate the grasping agent's personalization capability. 
-GraspMine aims to locate and grasp personal objects given a personal indicator, *e.g.,* "my sleeping pills," considering learning of 96 personal objects.
+GraspMine aims to locate and grasp personal objects given a personal indicator, *e.g.,* "my sleeping pills." 
+GraspMine is built upon 96 personal objects, 100+ everyday objects.
 
 
 #### Training Set
@@ -76,9 +77,22 @@ Each sample in the training set includes:
 1. An image containing a personal object.
 2. A natural language description.
 
+**Training Set**
+| Name  | Content | Examples | Size | Link |
+| --- | --- |--- | --- |--- |
+| `HRI.zip`  | Images from human-robot interaction | 96 | 0 MBytes | [Download]()|
+| `000.tsv`  | personal object descriptions (annotations) | 96 | 0 MBytes | [Download]()|
+
 #### Reminiscence
 
-The reminiscence consists of 400 raw images of the environment.
+The reminiscence consists of 400 raw images of the environment. This raw images can be utilized in learning process.
+
+**Reminiscence**
+| Name  | Content | Examples | Size | Link |
+| --- | --- |--- | --- |--- |
+| `Reminiscence.zip`  | Unlabeled images of Reminiscence | 400 | 129.4 MBytes | [Download](https://drive.google.com/file/d/1Y7W3RfHRAnQWteqhIJ8m-PfSyGLyZLhL/view?usp=sharing)|
+| `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
+
 
 #### Test Set
 
@@ -88,28 +102,19 @@ Each sample in the test set includes:
 3. Associated object coordinates.
 
 
-**Training Set**
-| Name  | Content | Examples | Size | Link |
-| --- | --- |--- | --- |--- |
-| `Reminiscence.zip`  | Unlabeled images of Reminiscence | 400 | 129.4 MBytes | [Download](https://drive.google.com/file/d/1Y7W3RfHRAnQWteqhIJ8m-PfSyGLyZLhL/view?usp=sharing)|
-| `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
-| `HRI.zip`  | Images from human-robot interaction | 96 | 0 MBytes | [Download]()|
-| `000.tsv`  | personal object descriptions (annotations) | 96 | 0 MBytes | [Download]()|
-| `0.tsv`  | 0 | 0 | 0 MBytes | [Download]()|
-
 **Test Set**
 | Name  | Content | Examples | Size | Link | Description |
 | --- | --- |--- | --- |--- |--- |
 | `heterogeneous.zip`  | Images of Heterogeneous split | 60 | 19.1 MBytes | [Download](https://drive.google.com/file/d/1asQ4mdsz1QenI90R51Xmo7-Bx2ZHTpVS/view?usp=sharing)| Scenes with randomly selected objects|
 | `homogeneous.zip`  | Images of Homogeneous split | 60 | 18.6 MBytes | [Download](https://drive.google.com/file/d/1an8IKAVT0UBE0K9Hq5NbXApgvoCkZPhu/view?usp=sharing)| Scenes with similar-looking objects of the same category|
 | `cluttered.zip`  | Images of Cluttered split | 106 | 36.6 MBytes | [Download](https://drive.google.com/file/d/1Y99XBJrXGw491ULXnf_JUiwTdL8Pzlob/view?usp=sharing)| highly cluttered objects. Sourced from the IM-Dial dataset|
-| `heterogeneous.pth`  | Annotations for Heterogeneous images | 120 | 12 KBytes | [Download]()||
-| `homogeneous.pth`  | Annotations for Homogeneous images | 120 | 12 KBytes | [Download]()||
-| `cluttered.pth`  | Annotations for Cluttered images | 106 | 32 KBytes | [Download]()||
-| `paraphrased.pth`  | Paraphrased annotations for all splits | 346 | 49 KBytes | [Download]()| Each personal indicator paraphrased by annotators|
+| `heterogeneous.pth`  | Annotations for Heterogeneous images | 120 | 12 KBytes | [Download](https://drive.google.com/file/d/17ep-5ytYs686T30T8PFGxKjrnDzI67wM/view?usp=sharing)||
+| `homogeneous.pth`  | Annotations for Homogeneous images | 120 | 12 KBytes | [Download](https://drive.google.com/file/d/17cw7gbtruCaIrkA9uiOgigfMIUQvCXU4/view?usp=sharing)||
+| `cluttered.pth`  | Annotations for Cluttered images | 106 | 32 KBytes | [Download](https://drive.google.com/file/d/17ddpjki8mVORGhdoRqQQflr3ELspT6Ti/view?usp=sharing)||
+| `paraphrased.pth`  | Paraphrased annotations for all splits | 346 | 49 KBytes | [Download](https://drive.google.com/file/d/17eTKdTnh1TJmrhwkduJQHOHHZo3UE9Lo/view?usp=sharing)| Each personal indicator paraphrased by annotators|
 
 
-Each line in ... as shown below.
+Each line in `heterogeneous.pth`, `homogeneous.pth`, `cluttered.pth`, `paraphrased.pth` is as shown below.
 
 <pre>
 Hello here
