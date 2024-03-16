@@ -16,6 +16,9 @@
 ## Overview
 <img src="readme_figures/IROS_demo.gif" width="100%" align="middle"><br><br>
 
+<br>
+<br>
+
 Citation
 -----------------------------
 If you use this code or data in your research, please consider citing:
@@ -27,6 +30,9 @@ If you use this code or data in your research, please consider citing:
   year={2023}
 }
 ```
+
+<br>
+<br>
 
 ## Table of Contents
 * [Environment Setup](#Environment-Setup)
@@ -40,6 +46,7 @@ If you use this code or data in your research, please consider citing:
 * [Acknowledgements](#Acknowledgements)
 
 
+<br>
 <br>
 
 Environment Setup
@@ -62,6 +69,7 @@ pip install -r requirements.txt
 ```
 
 <br>
+<br>
 
 
 GraspMine Dataset
@@ -70,6 +78,7 @@ GraspMine is an LCRG (Language-Guided Robotic Grasping) dataset collected to val
 GraspMine aims to locate and grasp personal objects given a personal indicator, *e.g.,* "my sleeping pills." 
 GraspMine is built upon 96 personal objects, 100+ everyday objects.
 
+<br>
 
 ### Training Set
 
@@ -95,6 +104,8 @@ Each element in `HRI.tsv` consists of a unique_id, image_id (do not use this), p
 0	38.png	the flowers for my bedroom	252.41,314.63,351.07,418.89	iVBORw0KGgoAAA....
 </pre>
 
+<br>
+
 ### Reminiscence
 
 The reminiscence consists of 400 raw images of the environment. This raw images can be utilized in learning process, but annotations CANNOT be used in GraspMine.
@@ -105,6 +116,7 @@ The reminiscence consists of 400 raw images of the environment. This raw images 
 | `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence. All objects detected from the Object Detector are saved as a cropped image | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
 | `Reminiscence_annotations.xlsx`  | Annotations of Reminiscence nodes. Each personal indicators are annotated with the {image_id}_{object_id} in the above `Reminiscence_nodes.zip` | 8270 | 4.4 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
 
+<br>
 
 ### Test Set
 
@@ -150,6 +162,7 @@ We expect data to be uploaded to the following directory structure:
 
 
 <br>
+<br>
 
 
 Reminiscence Construction
@@ -182,6 +195,7 @@ The extracted visual feature should be saved as following:
 The results will be a dictionary of name of the image file for keys and list of each object's features for values.
 
 <br>
+<br>
 
 
 Object Information Acquisition
@@ -189,6 +203,7 @@ Object Information Acquisition
 
 
 
+<br>
 <br>
 
 
@@ -215,16 +230,19 @@ The pre-trained checkpoints of PGA can be found below.
 
 
 <br>
+<br>
 
 
 Personalized Object Grounding Model
 --------------------------------------
 
 <br>
+<br>
 
 Personalized Object Grasping
 --------------------------------------
 
+<br>
 <br>
 
 
