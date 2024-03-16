@@ -71,7 +71,7 @@ GraspMine aims to locate and grasp personal objects given a personal indicator, 
 GraspMine is built upon 96 personal objects, 100+ everyday objects.
 
 
-#### Training Set
+### Training Set
 
 Each sample in the training set includes:
 1. An image containing a personal object.
@@ -83,7 +83,19 @@ Each sample in the training set includes:
 | `HRI.json`  | personal object descriptions (annotations). Keys are the image_ids in `HRI.zip` and Values consists of [{general indicator}, {persoanl indicator}] | 96 | 8 KBytes | [Download](https://drive.google.com/file/d/1YnJPSPH0J9W5dp6dSdxp798tNVQa_IQJ/view?usp=sharing)|
 | `HRI.tsv`  | preprocessed data for HRI. This consists of a image, a personal indicator, and the location of the object | 96 | 50.3 MBytes | [Download](https://drive.google.com/file/d/176SO_z__ndsahL1mjfyfuvS2ytSxvL-w/view?usp=sharing)|
 
-#### Reminiscence
+Each element in `HRI.json` is as shown below.
+
+<pre>
+"0.png": ["White bottle in front","my sleeping pills"]
+</pre>
+
+Each element in `HRI.tsv` consists of a unique_id, image_id (do not use this), personal indicator, bounding box coordinates, image in string as shown below.
+
+<pre>
+0	38.png	the flowers for my bedroom	252.41,314.63,351.07,418.89	iVBORw0KGgoAAA....
+</pre>
+
+### Reminiscence
 
 The reminiscence consists of 400 raw images of the environment. This raw images can be utilized in learning process, but annotations CANNOT be used in GraspMine.
 
@@ -94,7 +106,7 @@ The reminiscence consists of 400 raw images of the environment. This raw images 
 | `Reminiscence_annotations.xlsx`  | Annotations of Reminiscence nodes. Each personal indicators are annotated with the {image_id}_{object_id} in the above `Reminiscence_nodes.zip` | 8270 | 4.4 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
 
 
-#### Test Set
+### Test Set
 
 Each sample in the test set includes:
 1. Images containing multiple objects.
@@ -116,34 +128,26 @@ Each sample in the test set includes:
 Each line in `heterogeneous.pth`, `homogeneous.pth`, `cluttered.pth`, `paraphrased.pth` is as shown below.
 
 <pre>
-Hello here
+This will be provided soon. You can either check on your own by downloading the above links
 </pre>
 
-Each element in ... as shown below.
 
-<pre>
-['']
-</pre>
-
-Place the data in `./data` folder.
+<!--
+Place the downloaded data in `./data` folder.
 We expect data to be uploaded to the following directory structure:
 
     ├── data         
     │   ├── train       
-    │   │   ├── ENV1_train
-    │   │   │   ├── 0000.png      
+    │   │   ├── HRI
+    │   │   │   ├── 0.png      
     │   │   │   └── ...      
-    │   │   ├── ENV2_train   
-    │   │   │   ├── 0000.png      
-    │   │   │   └── ...      
-    │   ├── test  
-    │   │   ├── Test-H.tsv  
-    │   │   ├── Test-R.tsv  
-    │   │   ├── Test-E.pth  
-    │   │   ├── Test-E  
-    │   │   │   ├── 0000.png
+    │   │   └── HRI.json      
+    │   ├── Reminiscence  
+    │   │   │   ├── 0.png
     │   │   │   └── ...      
     └── 
+-->
+
 
 <br>
 
