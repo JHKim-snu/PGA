@@ -4,7 +4,7 @@
 </figure>
 <h1>PGA: Personalizing Grasping Agents with Single Human-Robot Interaction</h1>
   
-**[Junghyun Kim][4], &nbsp; [Gi-Cheon Kang][3]<sup>\*</sup>, &nbsp; [Jaein Kim][5]<sup>\*</sup>, &nbsp; [Seoyun Yang][1], &nbsp; [Minjoon Jung][1], &nbsp; [Byoung-Tak Zhang][6]** <br>
+**[Junghyun Kim][4], &nbsp; [Gi-Cheon Kang][3]<sup>\*</sup>, &nbsp; [Jaein Kim][5]<sup>\*</sup>, &nbsp; [Seoyun Yang][1], &nbsp; [Minjoon Jung][9], &nbsp; [Byoung-Tak Zhang][6]** <br>
 
 **[Submitted to The 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2024)][2]**
 </div>
@@ -77,21 +77,21 @@ Each sample in the training set includes:
 1. An image containing a personal object.
 2. A natural language description.
 
-**Training Set**
 | Name  | Content | Examples | Size | Link |
 | --- | --- |--- | --- |--- |
-| `HRI.zip`  | Images from human-robot interaction | 96 | 0 MBytes | [Download]()|
-| `000.tsv`  | personal object descriptions (annotations) | 96 | 0 MBytes | [Download]()|
+| `HRI.zip`  | Images from human-robot interaction | 96 | 37.4 MBytes | [Download](https://drive.google.com/file/d/17iTe82-SdfcA-jrK3l7CiKGqvSewfg7R/view?usp=sharing)|
+| `HRI.json`  | personal object descriptions (annotations). Keys are the image_ids in `HRI.zip` and Values consists of [{general indicator}, {persoanl indicator}] | 96 | 8 KBytes | [Download](https://drive.google.com/file/d/1YnJPSPH0J9W5dp6dSdxp798tNVQa_IQJ/view?usp=sharing)|
+| `HRI.tsv`  | preprocessed data for HRI. This consists of a image, a personal indicator, and the location of the object | 96 | 50.3 MBytes | [Download](https://drive.google.com/file/d/176SO_z__ndsahL1mjfyfuvS2ytSxvL-w/view?usp=sharing)|
 
 #### Reminiscence
 
-The reminiscence consists of 400 raw images of the environment. This raw images can be utilized in learning process.
+The reminiscence consists of 400 raw images of the environment. This raw images can be utilized in learning process, but annotations CANNOT be used in GraspMine.
 
-**Reminiscence**
 | Name  | Content | Examples | Size | Link |
 | --- | --- |--- | --- |--- |
 | `Reminiscence.zip`  | Unlabeled images of Reminiscence | 400 | 129.4 MBytes | [Download](https://drive.google.com/file/d/1Y7W3RfHRAnQWteqhIJ8m-PfSyGLyZLhL/view?usp=sharing)|
-| `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
+| `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence. All objects detected from the Object Detector are saved as a cropped image | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
+| `Reminiscence_annotations.xlsx`  | Annotations of Reminiscence nodes. Each personal indicators are annotated with the {image_id}_{object_id} in the above `Reminiscence_nodes.zip` | 8270 | 4.4 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
 
 
 #### Test Set
@@ -102,7 +102,6 @@ Each sample in the test set includes:
 3. Associated object coordinates.
 
 
-**Test Set**
 | Name  | Content | Examples | Size | Link | Description |
 | --- | --- |--- | --- |--- |--- |
 | `heterogeneous.zip`  | Images of Heterogeneous split | 60 | 19.1 MBytes | [Download](https://drive.google.com/file/d/1asQ4mdsz1QenI90R51Xmo7-Bx2ZHTpVS/view?usp=sharing)| Scenes with randomly selected objects|
@@ -241,7 +240,8 @@ Experimental Results
 
 Acknowledgements
 -----------------
-This repo is built upon [OFA](https://github.com/OFA-Sys/OFA). Thank you.
+This repo is built upon [OFA](https://github.com/OFA-Sys/OFA), a vision-and-language foundation model. 
+Thank you.
 
 
 
@@ -253,3 +253,4 @@ This repo is built upon [OFA](https://github.com/OFA-Sys/OFA). Thank you.
 [6]: https://bi.snu.ac.kr/~btzhang/
 [7]: https://github.com/suyeonshin/
 [8]: https://conda.io/docs/user-guide/install/download.html
+[9]: https://minjoong507.github.io/
