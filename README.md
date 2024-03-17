@@ -4,7 +4,7 @@
 </figure>
 <h1>PGA: Personalizing Grasping Agents with Single Human-Robot Interaction</h1>
   
-**[Junghyun Kim][4], &nbsp; [Gi-Cheon Kang][3]<sup>\*</sup>, &nbsp; [Jaein Kim][5]<sup>\*</sup>, &nbsp; [Seoyun Yang][1], &nbsp; [Minjoon Jung][1], &nbsp; [Byoung-Tak Zhang][6]** <br>
+**[Junghyun Kim][4], &nbsp; [Gi-Cheon Kang][3]<sup>\*</sup>, &nbsp; [Jaein Kim][5]<sup>\*</sup>, &nbsp; [Seoyun Yang][1], &nbsp; [Minjoon Jung][9], &nbsp; [Byoung-Tak Zhang][6]** <br>
 
 **[Submitted to The 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2024)][2]**
 </div>
@@ -14,7 +14,10 @@
 </h3>
 
 ## Overview
-<img src="readme_figures/PGA_overview.png" width="40%" align="middle"><br><br>
+<img src="readme_figures/IROS_demo.gif" width="100%" align="middle"><br><br>
+
+<br>
+<br>
 
 Citation
 -----------------------------
@@ -28,21 +31,22 @@ If you use this code or data in your research, please consider citing:
 }
 ```
 
-<!--
-## Table of Contents
-* [Setup and Dependencies](#Setup-and-Dependencies)
-* [Download Data](#Download-Data)
-* [Pre-trained Checkpoints](#Pre-trained-Checkpoints)
-* [Training](#Training)
-* [Adaptation to Discriminative Visual Dialog](#Adaptation-to-Discriminative-Visual-Dialog)
-* [Visual Dialog Generation](#Visual-Dialog-Generation)
-* [Evaluation](#Evaluation)
-* [Adversarial Robustness Study](#Adversarial-Robustness-Study)
-* [Demo](#Demo)
-* [Acknowledgements](#Acknowledgements)
-* [License](#License)<br><br>
--->
+<br>
+<br>
 
+## Table of Contents
+* [Environment Setup](#Environment-Setup)
+* [GraspMine Dataset](#GraspMine-Dataset)
+* [Reminiscence Construction](#Reminiscence-Construction)
+* [Object Information Acquisition](#Object-Information-Acquisition)
+* [Propagation through Reminiscence](#Propagation-through-Reminiscence)
+* [Personalized Object Grounding Model](#Personalized-Object-Grounding-Model)
+* [Personalized Object Grasping](#Personalized-Object-Grasping)
+* [Experimental Results](#Experimental-Results)
+* [Acknowledgements](#Acknowledgements)
+
+
+<br>
 <br>
 
 Environment Setup
@@ -65,33 +69,56 @@ pip install -r requirements.txt
 ```
 
 <br>
+<br>
 
 
 GraspMine Dataset
 ----------------------
 GraspMine is an LCRG (Language-Guided Robotic Grasping) dataset collected to validate the grasping agent's personalization capability. 
-GraspMine aims to locate and grasp personal objects given a personal indicator, *e.g.,* "my sleeping pills," considering learning of 96 personal objects.
+GraspMine aims to locate and grasp personal objects given a personal indicator, *e.g.,* "my sleeping pills." 
+GraspMine is built upon 96 personal objects, 100+ everyday objects.
 
+<br>
 
-#### Training Set
+### Training Set
 
 Each sample in the training set includes:
 1. An image containing a personal object.
 2. A natural language description.
 
-#### Reminiscence
+| Name  | Content | Examples | Size | Link |
+| --- | --- |--- | --- |--- |
+| `HRI.zip`  | Images from human-robot interaction | 96 | 37.4 MBytes | [Download](https://drive.google.com/file/d/17iTe82-SdfcA-jrK3l7CiKGqvSewfg7R/view?usp=sharing)|
+| `HRI.json`  | personal object descriptions (annotations). Keys are the image_ids in `HRI.zip` and Values consists of [{general indicator}, {persoanl indicator}] | 96 | 8 KBytes | [Download](https://drive.google.com/file/d/1YnJPSPH0J9W5dp6dSdxp798tNVQa_IQJ/view?usp=sharing)|
+| `HRI.tsv`  | preprocessed data for HRI. This consists of a image, a personal indicator, and the location of the object | 96 | 50.3 MBytes | [Download](https://drive.google.com/file/d/176SO_z__ndsahL1mjfyfuvS2ytSxvL-w/view?usp=sharing)|
 
-The reminiscence consists of 400 raw images of the environment.
+Each element in `HRI.json` is as shown below.
 
-#### Test Set
+<pre>
+"0.png": ["White bottle in front","my sleeping pills"]
+</pre>
 
-The test set comprises five distinct splits:
+Each element in `HRI.tsv` consists of a unique_id, image_id (do not use this), personal indicator, bounding box coordinates, image in string as shown below.
 
-- **Heterogeneous Split**: Scenes with randomly selected objects, making up 60 images with 120 personal indicators and bounding boxes.
-- **Homogeneous Split**: Scenes with similar-looking objects of the same category, presenting a challenge for discrimination, with 60 images featuring 120 indicators and bounding boxes.
-- **Cluttered Split**: Contains 106 images with highly cluttered objects sourced from the IM-Dial dataset~\cite{prograsp}, each featuring a single personal indicator and bounding box per image.
-- **Paraphrased Split**: Includes all samples from the Heterogeneous, Homogeneous, and Cluttered splits, with each personal indicator paraphrased by annotators.
-- **Generic Split**: Sourced from the \textit{VGPI} dataset presented in GVCCI~\cite{gvcci}, we utilized the Test-E split, aligning with our environmental settings.
+<pre>
+0	38.png	the flowers for my bedroom	252.41,314.63,351.07,418.89	iVBORw0KGgoAAA....
+</pre>
+
+<br>
+
+### Reminiscence
+
+The reminiscence consists of 400 raw images of the environment. This raw images can be utilized in learning process, but annotations CANNOT be used in GraspMine.
+
+| Name  | Content | Examples | Size | Link |
+| --- | --- |--- | --- |--- |
+| `Reminiscence.zip`  | Unlabeled images of Reminiscence | 400 | 129.4 MBytes | [Download](https://drive.google.com/file/d/1Y7W3RfHRAnQWteqhIJ8m-PfSyGLyZLhL/view?usp=sharing)|
+| `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence. All objects detected from the Object Detector are saved as a cropped image | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
+| `Reminiscence_annotations.xlsx`  | Annotations of Reminiscence nodes. Each personal indicators are annotated with the {image_id}_{object_id} in the above `Reminiscence_nodes.zip` | 8270 | 4.4 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
+
+<br>
+
+### Test Set
 
 Each sample in the test set includes:
 1. Images containing multiple objects.
@@ -99,55 +126,42 @@ Each sample in the test set includes:
 3. Associated object coordinates.
 
 
-**Training Set**
-| Name  | Content | Examples | Size | Link |
-| --- | --- |--- | --- |--- |
-| `0.zip`  | 0 | 000 | 0 MBytes | [Download]()|
-| `0.pth`  | Sample generated by GVCCI | 000 | 0 MBytes | [Download]()|
-| `0.tsv`  | 0 | 0 | 0 MBytes | [Download]()|
-| `0.tsv`  | 0 | 0 | 0 MBytes | [Download]()|
-
-**Test Set**
-| Name  | Content | Examples | Size | Link |
-| --- | --- |--- | --- |--- |
-| `0.zip`  | 0 | 000 | 0 MBytes | [Download]()|
-| `0.pth`  | Sample generated by GVCCI | 000 | 0 MBytes | [Download]()|
-| `0.tsv`  | 0 | 0 | 0 MBytes | [Download]()|
-| `0.tsv`  | 0 | 0 | 0 MBytes | [Download]()|
+| Name  | Content | Examples | Size | Link | Description |
+| --- | --- |--- | --- |--- |--- |
+| `heterogeneous.zip`  | Images of Heterogeneous split | 60 | 19.1 MBytes | [Download](https://drive.google.com/file/d/1asQ4mdsz1QenI90R51Xmo7-Bx2ZHTpVS/view?usp=sharing)| Scenes with randomly selected objects|
+| `homogeneous.zip`  | Images of Homogeneous split | 60 | 18.6 MBytes | [Download](https://drive.google.com/file/d/1an8IKAVT0UBE0K9Hq5NbXApgvoCkZPhu/view?usp=sharing)| Scenes with similar-looking objects of the same category|
+| `cluttered.zip`  | Images of Cluttered split | 106 | 36.6 MBytes | [Download](https://drive.google.com/file/d/1Y99XBJrXGw491ULXnf_JUiwTdL8Pzlob/view?usp=sharing)| highly cluttered objects. Sourced from the IM-Dial dataset|
+| `heterogeneous.pth`  | Annotations for Heterogeneous images | 120 | 12 KBytes | [Download](https://drive.google.com/file/d/17ep-5ytYs686T30T8PFGxKjrnDzI67wM/view?usp=sharing)||
+| `homogeneous.pth`  | Annotations for Homogeneous images | 120 | 12 KBytes | [Download](https://drive.google.com/file/d/17cw7gbtruCaIrkA9uiOgigfMIUQvCXU4/view?usp=sharing)||
+| `cluttered.pth`  | Annotations for Cluttered images | 106 | 32 KBytes | [Download](https://drive.google.com/file/d/17ddpjki8mVORGhdoRqQQflr3ELspT6Ti/view?usp=sharing)||
+| `paraphrased.pth`  | Paraphrased annotations for all splits | 346 | 49 KBytes | [Download](https://drive.google.com/file/d/17eTKdTnh1TJmrhwkduJQHOHHZo3UE9Lo/view?usp=sharing)| Each personal indicator paraphrased by annotators|
 
 
-Each line in ... as shown below.
+Each line in `heterogeneous.pth`, `homogeneous.pth`, `cluttered.pth`, `paraphrased.pth` is as shown below.
 
 <pre>
-Hello here
+This will be provided soon. You can either check on your own by downloading the above links
 </pre>
 
-Each element in ... as shown below.
 
-<pre>
-['']
-</pre>
-
-Place the data in `./data` folder.
+<!--
+Place the downloaded data in `./data` folder.
 We expect data to be uploaded to the following directory structure:
 
     ├── data         
     │   ├── train       
-    │   │   ├── ENV1_train
-    │   │   │   ├── 0000.png      
+    │   │   ├── HRI
+    │   │   │   ├── 0.png      
     │   │   │   └── ...      
-    │   │   ├── ENV2_train   
-    │   │   │   ├── 0000.png      
-    │   │   │   └── ...      
-    │   ├── test  
-    │   │   ├── Test-H.tsv  
-    │   │   ├── Test-R.tsv  
-    │   │   ├── Test-E.pth  
-    │   │   ├── Test-E  
-    │   │   │   ├── 0000.png
+    │   │   └── HRI.json      
+    │   ├── Reminiscence  
+    │   │   │   ├── 0.png
     │   │   │   └── ...      
     └── 
+-->
 
+
+<br>
 <br>
 
 
@@ -181,6 +195,7 @@ The extracted visual feature should be saved as following:
 The results will be a dictionary of name of the image file for keys and list of each object's features for values.
 
 <br>
+<br>
 
 
 Object Information Acquisition
@@ -188,6 +203,7 @@ Object Information Acquisition
 
 
 
+<br>
 <br>
 
 
@@ -214,25 +230,28 @@ The pre-trained checkpoints of PGA can be found below.
 
 
 <br>
+<br>
 
 
 Personalized Object Grounding Model
 --------------------------------------
 
 <br>
+<br>
 
 Personalized Object Grasping
 --------------------------------------
 
+<br>
 <br>
 
 
 Experimental Results
 --------------------------------------
 
-<img src="readme_figures/offline_results.png" width="80%" align="middle"><br><br>
+<img src="readme_figures/table_offline.png" width="80%" align="middle"><br><br>
 
-<img src="readme_figures/online_results.png" width="40%" align="middle"><br><br>
+<img src="readme_figures/table_online.png" width="40%" align="middle"><br><br>
 
 
 
@@ -243,15 +262,17 @@ Experimental Results
 
 Acknowledgements
 -----------------
-This repo includes codes built upon [OFA](https://github.com/OFA-Sys/OFA).
+This repo is built upon [OFA](https://github.com/OFA-Sys/OFA), a vision-and-language foundation model. 
+Thank you.
 
 
 
 [1]: https://
 [2]: https://iros2024-abudhabi.org/
 [3]: https://gicheonkang.com
-[4]: https://github.com/JHKim-snu/
+[4]: https://jhkim-snu.github.io/
 [5]: https://github.com/qpwodlsqp/
 [6]: https://bi.snu.ac.kr/~btzhang/
 [7]: https://github.com/suyeonshin/
 [8]: https://conda.io/docs/user-guide/install/download.html
+[9]: https://minjoong507.github.io/
