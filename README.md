@@ -200,7 +200,17 @@ The results will be a dictionary of name of the image file for keys and list of 
 
 Object Information Acquisition
 --------------------------------------
+Download the [GVCCI](http://github.com/GVCCI) model, ENV2(135).
 
+```shell
+OMP_NUM_THREADS=4 CUDA_VISIBLE_DEVICES=0,1,2,3 python OIA.py --gvcci_path YOUR_GVCCI_PATH --save_path PATH_TO_SAVE --hri_path YOUR_HRI.json_PATH --cropped_img_path PATH_TO_SAVE_IMGS --raw_img_path YOUR_HRI.zip_PATH --xlsx_path YOUR_Reminiscence_annotations.xlsx.PATH
+```
+
+The results can be downloaded from [here](https://drive.google.com/file/d/1b4oQ3W8gIO3JQLSTpfQgLWAZnRqPglg4/view?usp=sharing) that contains the following information.
+
+<pre>
+img_id: [personal indicator, bounding box coordinates]
+</pre>
 
 
 <br>
