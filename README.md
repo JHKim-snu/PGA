@@ -240,10 +240,38 @@ img_id: [personal indicator, bounding box coordinates]
 
 Propagation through Reminiscence
 --------------------------------------
-Since you have a generated triplet of image, location, and instructions, you can train any visual grounidng model you want. 
+Utilizing the information obtained from Object Information Acquisition, unlabelled images from the Reminiscence dataset are pseudo-labeled using the Propagation through Reminiscence. 
+To execute this, run the following script:
+
+```shell
+CUDA_VISIBLE_DEVICES=1 python label_propagation.py --model 'vanilla' --thresh 0.55 --iter 3 --save_nodes True --sample_n 400 --ignore_interaction True --seed 777
+```
+
+The `.pth` file will be saved that consists of a list, each element representing each object node.
+Each object nodes are a dictionary tagged with following informations:
+
+- visual feature from DINO
+- category
+- label
+- known
+- labelled
+- image_id
+- object_id
+
+<br>
+<br>
+
+
+Personalized Object Grounding Model
+--------------------------------------
+
+
+Since you have a generated triplet of image, location, and personal indicator, you can train any visual grounidng model you want. 
 Here, we provide a sample training and evaluation code of [OFA](http://arxiv.org/abs/2202.03052).
 The source code is from [OFA Github](https://github.com/OFA-Sys/OFA).
 
+
+### Training
 
 
 The pre-trained checkpoints of PGA can be found below.
@@ -260,12 +288,11 @@ The pre-trained checkpoints of PGA can be found below.
 | [Download]()| [Download]() | [Download]() | [Download]() |
 
 
-<br>
-<br>
+### Visualization
 
-
-Personalized Object Grounding Model
---------------------------------------
+```shell
+python visualization.py
+```
 
 <br>
 <br>
