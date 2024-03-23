@@ -144,22 +144,6 @@ This will be provided soon. You can either check on your own by downloading the 
 </pre>
 
 
-<!--
-Place the downloaded data in `./data` folder.
-We expect data to be uploaded to the following directory structure:
-
-    ├── data         
-    │   ├── train       
-    │   │   ├── HRI
-    │   │   │   ├── 0.png      
-    │   │   │   └── ...      
-    │   │   └── HRI.json      
-    │   ├── Reminiscence  
-    │   │   │   ├── 0.png
-    │   │   │   └── ...      
-    └── 
--->
-
 
 <br>
 <br>
@@ -231,15 +215,15 @@ CUDA_VISIBLE_DEVICES=1 python label_propagation.py --model 'vanilla' --thresh 0.
 The `.pth` file will be saved that consists of a list, each element representing each object node.
 Each object nodes are a dictionary tagged with following informations:
 
-| Items  | Content | Example |
-| --- | --- |--- |
-| visual feature  | 512 dimension feature vector extracted from [DINO](https://github.com/facebookresearch/dino) | xx |
-| category  | category of the object | xx |
-| label  | personal indicator | xx |
-| img_id  | Reminiscence image id | xx |
-| obj_id  | object id | xx |
-| known  | whether if the node is from OIA, `True` or `False` | `True` |
-| labelled  | whether if the node is labeled or not (including pseudo-labels), `True` or `False` | `True` |
+| Items  | Content | 
+| --- | --- |
+| visual feature  | 512 dimension feature vector extracted from [DINO](https://github.com/facebookresearch/dino) | 
+| category  | category of the object |
+| label  | personal indicator |
+| img_id  | Reminiscence image id |
+| obj_id  | object id |
+| known  | whether if the node is from OIA, `True` or `False` |
+| labelled  | whether if the node is labeled or not (including pseudo-labels), `True` or `False` | 
 
 
 
