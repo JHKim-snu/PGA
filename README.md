@@ -236,10 +236,9 @@ Each object nodes are a dictionary tagged with following informations:
 Personalized Object Grounding Model
 --------------------------------------
 
+Our Personalized Object Grounding Model is based on [OFA](http://arxiv.org/abs/2202.03052), the state-of-the-art vision-and-language foundation model.
 
-Since you have a generated triplet of image, location, and personal indicator, you can train any visual grounidng model you want. 
-Here, we provide a sample training and evaluation code of [OFA](http://arxiv.org/abs/2202.03052).
-The source code is from [OFA Github](https://github.com/OFA-Sys/OFA).
+With the triplet of image, personal indicator, and object coordinate, you can train the grounding model with the following script:
 
 
 ### Training
@@ -265,8 +264,18 @@ The pre-trained checkpoints of PGA can be found below.
 
 ### Visualization
 
+If you have the pretrained grounding model, you can visualize the prediction results with the following script:
+
 ```shell
 python visualization.py
+```
+
+### Evaluation
+
+You can evaluate your model on the test sets with the following script:
+
+```shell
+python evaluation.py
 ```
 
 <br>
