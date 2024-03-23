@@ -21,19 +21,20 @@ parser = argparse.ArgumentParser(description='interactive learning')
 parser.add_argument('--demo', default=False, action='store_true')
 args = parser.parse_args()
 
+roi_num = 10
+
 #############################
-# Load OFA_GVCCI
+# Load GVCCI
 #############################
 
 tasks.register_task('refcoco', RefcocoTask)
 use_cuda = torch.cuda.is_available()
-overrides={"bpe_dir":"/home/jhkim/icra24/OFA/utils/BPE"}
+overrides={"bpe_dir":"./utils/BPE"}
 
-ofa_path = '/data/jhkim/iros23/OFA_checkpoints/refcoco_large_best.pt'
-ofa_gvcci_path = '/data/jhkim/iros23/OFA_refcoco_checkpoints_0208_pick/0208_train_135/checkpoint_last.pt'
+gvcci_path = ''  # INSERT Your GVCCI model path
 
 models, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-        utils.split_paths(ofa_gvcci_path),
+        utils.split_paths(gvcci_path),
         arg_overrides=overrides
     )
 
@@ -115,8 +116,8 @@ def construct_sample(image: Image, text: str):
 # Connect Socket
 #############################
 
-HOST = '147.47.200.155'
-PORT = 9998
+HOST = '' # INSERT your HOST
+PORT =  # INSERT the PORT
 
 srv_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 srv_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -134,11 +135,11 @@ print(f'Connected by: {addr}')
 # Receive raw image and save
 # Send coordinates
 # Client: Save raw images (n-images per object, object{}_{}.png)
-# Server: Save {obj_id}, {ofa_input} and {personal_q}
+# Server: Save {obj_id}, {general_indicator} and {personal_indicator}
 #############################
 
-raw_img_path = '/data/jhkim/icra24/raw_images/interaction/'
-annotation_path = '/home/jhkim/icra24/interactive/'
+raw_img_path = '' # INSERT path to save images from OIA
+annotation_path = '' # INSERT path to save annotations from OIA
 
 annotation = {}
 
@@ -169,54 +170,48 @@ while True: # for all objects
             cv2.imwrite(save_image_path, cv2_img)
             print("saving image to {} ... \n".format(save_image_path))
             
-            
-            #############################
-            ###############vvvvvvvvvvvvvvvv################
 
             image = Image.open(save_image_path)
-            # crop image
             y_crop = 200
             image = image.crop((0,y_crop,image.size[0],image.size[1]))
-            # image = np.asarray(image)        
-            # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
             correct_directive = 'n'
             while correct_directive == 'n':
-                directive = input("Insert the directive ... ") # object in front is my phone
+                directive = input("Insert the directive ... ") # object in front / my phone
                 correct_directive = input("any key if the directive is correct ... if not, 'n' ... ")
             print('\n')
             
             try:
-                ofa_input = directive.split("/")[0].strip()
-                personal_q = directive.split("/")[1].strip()
+                general_indicator = directive.split("/")[0].strip()
+                personal_indicator = directive.split("/")[1].strip()
             except:
                 print('wrong query type... insert "/" between the indicators!!')
                 directive = input()
-                ofa_input = directive.split("/")[0].strip()
-                personal_q = directive.split("/")[1].strip()
+                general_indicator = directive.split("/")[0].strip()
+                personal_indicator = directive.split("/")[1].strip()
 
             print("object num: {}".format(object_cnt))
-            print("ofa_input: {}".format(ofa_input))
-            print("personal q: {}".format(personal_q))
+            print("general_indicator: {}".format(general_indicator))
+            print("personal q: {}".format(personal_indicator))
 
             correct_annotation = input("is the info correct? y or n ...")
             if correct_annotation == 'n':
                 object_cnt = int(input("insert object count ..."))
-                ofa_input = input("insert ofa input ...")
-                personal_q = input("insert psersonal indicator ...")
+                general_indicator = input("insert ofa input ...")
+                personal_indicator = input("insert psersonal indicator ...")
             print('\n')
 
-            annotation['{}'.format(int(object_cnt))] = [ofa_input, personal_q]
+            annotation['{}'.format(int(object_cnt))] = [general_indicator, personal_indicator]
 
             # Construct input sample & preprocess for GPU if cuda available
-            sample = construct_sample(image, ofa_input)
+            sample = construct_sample(image, general_indicator)
             sample = utils.move_to_cuda(sample) if use_cuda else sample
 
             # Run eval step for refcoco
             print('\n')
             with torch.no_grad():
                 result, scores = eval_step(task, generator, models, sample)
-                print("OFA inferring with ...'{}'\n".format(ofa_input))
+                print("OFA inferring with ...'{}'\n".format(general_indicator))
 
             # Tmp bbox info
             xtl_pick, ytl_pick, xbr_pick, ybr_pick = result[0]["box"][0], result[0]["box"][1]+y_crop, result[0]["box"][2], result[0]["box"][3]+y_crop
@@ -226,7 +221,7 @@ while True: # for all objects
             cli_sock.send(bbox_info.encode())
 
             if any(xx<0 for xx in [xtl_pick, ytl_pick, xbr_pick, ybr_pick]):
-                print("failed... box out of range!\n ofa_input: {}\n retrying...".format(ofa_input))
+                print("failed... box out of range!\n general_indicator: {}\n retrying...".format(general_indicator))
                 continue
             
             success = input("y if success n if fail ... ")
@@ -235,7 +230,7 @@ while True: # for all objects
                 continue
 
             view = 0
-            for k in range(2):
+            for k in range(roi_num):
                 length = int(cli_sock.recv(64).decode('utf-8'))
                 buf = b''
                 while length:

@@ -152,7 +152,7 @@ with torch.no_grad():
     result, scores = eval_step(task, generator2, models2, sample)
 
 
-img = cv2.cvtColor(numpy.asarray(image), cv2.COLOR_RGB2BGR)
+img = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
 cv2.rectangle(
     img,
     (int(result[0]["box"][0]), int(result[0]["box"][1])),
