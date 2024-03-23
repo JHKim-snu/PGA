@@ -200,7 +200,38 @@ The results will be a dictionary of name of the image file for keys and list of 
 
 Object Information Acquisition
 --------------------------------------
+*You need a physical robot to run this part*
 
+To initiate an interaction with the robot, position the personal object in front of it, alongside both the general and personal indicators, e.g., "the object in front is my sleeping pills".
+Utilizing the general indicator (the object placed in front), our system employs GVCCI to determine the location of the object. 
+This process will automatically record crucial labels from the interaction, including:
+- an initial image
+- images of the robot-object interaction
+- personal indicator
+- and the object bounding box coordinate.
+
+Download the [GVCCI](http://github.com/GVCCI) model, ENV2(135).
+
+```shell
+OMP_NUM_THREADS=4 CUDA_VISIBLE_DEVICES=0,1,2,3 python OIA_interaction.py
+```
+
+Upon completion, the following data is automatically saved:
+
+1. Image Files: A set of {object_num}_{interaction_num}.png files are generated, capturing each interaction uniquely.
+
+2. Dictionary: A dictionary is created, with keys represented as {object_num}, and corresponding values as lists containing lists of (general_indicator, personal_indicator).
+
+
+```shell
+OMP_NUM_THREADS=4 CUDA_VISIBLE_DEVICES=0,1,2,3 python OIA_postprocess.py --gvcci_path YOUR_GVCCI_PATH --save_path PATH_TO_SAVE --hri_path YOUR_HRI.json_PATH --cropped_img_path PATH_TO_SAVE_IMGS --raw_img_path YOUR_HRI.zip_PATH --xlsx_path YOUR_Reminiscence_annotations.xlsx.PATH
+```
+
+If you do not have the robot to perform, the results can be alternatively downloaded from [here](https://drive.google.com/file/d/1b4oQ3W8gIO3JQLSTpfQgLWAZnRqPglg4/view?usp=sharing) that contains the following information.
+
+<pre>
+img_id: [personal indicator, bounding box coordinates]
+</pre>
 
 
 <br>
