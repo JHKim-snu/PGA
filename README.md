@@ -231,13 +231,19 @@ CUDA_VISIBLE_DEVICES=1 python label_propagation.py --model 'vanilla' --thresh 0.
 The `.pth` file will be saved that consists of a list, each element representing each object node.
 Each object nodes are a dictionary tagged with following informations:
 
-- visual feature from DINO
-- category
-- label
-- known
-- labelled
-- image_id
-- object_id
+| Items  | Content | Example |
+| --- | --- |--- |
+| visual feature  | 512 dimension feature vector extracted from [DINO](https://github.com/facebookresearch/dino) | xx |
+| category  | category of the object | xx |
+| label  | personal indicator | xx |
+| img_id  | Reminiscence image id | xx |
+| obj_id  | object id | xx |
+| known  | whether if the node is from OIA, `True` or `False` | `True` |
+| labelled  | whether if the node is labeled or not (including pseudo-labels), `True` or `False` | `True` |
+
+
+
+
 
 <br>
 <br>
