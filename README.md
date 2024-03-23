@@ -260,6 +260,10 @@ The source code is from [OFA Github](https://github.com/OFA-Sys/OFA).
 
 ### Training
 
+```shell
+cd run_scripts
+nohup sh train.sh
+```
 
 The pre-trained checkpoints of PGA can be found below.
 
