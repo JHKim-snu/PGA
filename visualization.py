@@ -8,6 +8,7 @@ from models.ofa import OFAModel
 from PIL import Image
 import os
 import cv2
+from matplotlib import pyplot as plt
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3"
 
@@ -170,7 +171,6 @@ cv2.rectangle(
 )
 #print(result[0]["box"])
 
-from matplotlib import pyplot as plt
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 plt.imshow(img)
 print(answer[q][0])

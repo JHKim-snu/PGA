@@ -20,6 +20,8 @@ start_time = time.time()
 
 from numpy import dot
 from numpy.linalg import norm
+
+
 def cos_sim(A, B):
   A = A.squeeze()
   B = B.squeeze()
@@ -98,7 +100,6 @@ def LabelPropagation(V,E,max_iter, model):
     return V
     
 if __name__ == '__main__':
-    print('1')
     args = parse_args()
 
     random.seed(args.seed)
@@ -120,7 +121,7 @@ if __name__ == '__main__':
         vitb16.eval()
         vitb16 = vitb16.to(device)
 
-        model_path = '/data/jhkim/icra24/dino_model/linear_probing_model.pth'
+        model_path = ''
         model = Linear()
 
         # Load the state dict normally
@@ -147,7 +148,7 @@ if __name__ == '__main__':
         model = torch.hub.load('facebookresearch/dino:main', 'dino_vitb8')
         # model.fc = nn.Linear(768,512)
 
-        model_path = '/data/jhkim/icra24/dino_model/full_tuning.pth'
+        model_path = '' 
 
         state_dict = torch.load(model_path)
 
@@ -168,7 +169,7 @@ if __name__ == '__main__':
     #################################################
     ################ Read Excel #####################
     print('start reading excel')
-    xcel_path = '/home/jhkim/icra24/test.xlsx'
+    xcel_path = '' # path to Reminiscence_annotations.xlsx
     xl = pd.ExcelFile(xcel_path)
 
     df = xl.parse(xl.sheet_names[0])
@@ -243,14 +244,14 @@ if __name__ == '__main__':
 
 
     # Get interactive annotations
-    inter_crop_path = '/data/jhkim/icra24/cropped_interaction/'
-    inter_annot_path = '/home/jhkim/icra24/interactive/interactive_perQ_bbox.json'  #{'0.png':[perQ, bbox], ...}
+    inter_crop_path = '' # image path saved from OIA_postprocess.py
+    inter_annot_path = ''  # annotation path saved from OIA_postprocess.py, {image_id:[personal_indicator, bbox], ...}
 
     with open(inter_annot_path, 'r') as f:
         inter_annotation = json.load(f)
 
     inter_ignore = 0
-    for inter_obj_key, inter_obj_val in inter_annotation.items():     #{'0.png':[perQ, bbox], ...}
+    for inter_obj_key, inter_obj_val in inter_annotation.items():    
         personal_q = inter_obj_val[0].strip()
         bbox = inter_obj_val[1]
 
@@ -320,19 +321,6 @@ if __name__ == '__main__':
     #################################################
     ########### Make initial Graoh edge E ###########
 
-    # E = torch.empty((len(V),len(V)))
-
-    # for i in range(E.shape[0]):
-    #     for j in range(E.shape[1]):
-    #         if j>i:
-    #             continue
-    #         # euclidien distance
-    #         # if args.model in []:
-    #         #     E[i][j] = F.pairwise_distance(V[i]["visual feature"].cpu(), V[j]["visual feature"].cpu())
-    #         # cosine similarity
-    #         E[i][j] = cos_sim(V[i]["visual feature"].cpu(), V[j]["visual feature"].cpu())
-    #         E[j][i] = E[i][j]
-
     features = torch.tensor([fi['visual feature'].squeeze().tolist() for fi in V]).cuda()
     norm_features = F.normalize(features, p=2, dim=1)
     E = torch.mm(norm_features, norm_features.t()).cpu()
@@ -376,9 +364,7 @@ if __name__ == '__main__':
                 vague_wrong += 1
 
     print("propagated: {}/{} = ".format(labelled, valid_num), labelled/valid_num)
-    # print("\n")
     print("correct answers among labelled images: {}/{} = ".format(correct, labelled), correct/labelled)
-    # print("\n")
     print("labelled while shouldn't be (line): {}/{} = ".format(line_wrong, line), line_wrong/line)
     print("labelled while shouldn't be (vague): {}/{} = ".format(vague_wrong, vague), vague_wrong/vague)
     print("labelled while shouldn't be (total): {}/{} = ".format(line_wrong+vague_wrong, line+vague), (line_wrong+vague_wrong)/(line+vague))
@@ -387,9 +373,9 @@ if __name__ == '__main__':
     ########### Save propagated Nodes ###########
     if args.save_nodes:
         if args.ignore_interaction:
-            pth_path = '/data/jhkim/icra24/ofa_vg_data/lp_{}_{}_{}sampled_{}_ignore_from2.pth'.format(args.model, args.thresh, args.sample_n, args.seed)
+            pth_path = './lp_{}_{}_{}sampled_{}_ignore_from2.pth'.format(args.model, args.thresh, args.sample_n, args.seed)
         else:
-            pth_path = '/data/jhkim/icra24/ofa_vg_data/lp_{}_{}_{}sampled.pth'.format(args.model, args.thresh, args.sample_n)
+            pth_path = './lp_{}_{}_{}sampled.pth'.format(args.model, args.thresh, args.sample_n)
         torch.save(V_propagated, pth_path)
 
     # V structure
