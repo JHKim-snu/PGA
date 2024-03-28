@@ -144,22 +144,6 @@ This will be provided soon. You can either check on your own by downloading the 
 </pre>
 
 
-<!--
-Place the downloaded data in `./data` folder.
-We expect data to be uploaded to the following directory structure:
-
-    ├── data         
-    │   ├── train       
-    │   │   ├── HRI
-    │   │   │   ├── 0.png      
-    │   │   │   └── ...      
-    │   │   └── HRI.json      
-    │   ├── Reminiscence  
-    │   │   │   ├── 0.png
-    │   │   │   └── ...      
-    └── 
--->
-
 
 <br>
 <br>
@@ -167,32 +151,13 @@ We expect data to be uploaded to the following directory structure:
 
 Reminiscence Construction
 --------------------------------------
-Once you recieve images from whereever (robot, web, etc.), you first need to extract visual features of objects (category, attribute, location) in images to generate the instructions.
-For visual feature extraction, we leverage the pretrained classifiers and object detector from [Faster R-CNN](https://arxiv.org/abs/1506.01497) and [Bottom-Up Attention](https://arxiv.org/abs/1707.07998).
+For Reminiscence Construction, we leverage the pretrained classifiers and object detecto from [Bottom-Up Attention](https://arxiv.org/abs/1707.07998) for detecting every objects in the scene.
 The code is originated and modified from [this repository](https://github.com/MILVLG/bottom-up-attention.pytorch).
 
 We strongly recommend you to use a separate environment for the visual feature extraction.
 Please follow the Prerequisites [here](https://github.com/MILVLG/bottom-up-attention.pytorch).
 
-Extract the visual features with the following script:
-```shell
-cd visual_feature_extraction
-python make_image_list.py
-OMP_NUM_THREADS=4 CUDA_VISIBLE_DEVICES=0,1,2,3 python extract.py --load_dir ./output_caffe152/ --image_dir ../data/train/ENV1_train/ --out_path ../instruction_generation/data/detection_results/ENV1/r152_attr_detection_results --image_list_file ./ENV1_train_train_imagelist_split0.txt --vg_dataset ENV1_train --cuda --split_ind 0
-```
-
-The extracted visual feature should be saved as following:
-
-    ├── instruction_generation        
-    │   ├── data        
-    │   │   ├── detected_results
-    │   │   │   ├── ENV1_train   
-    │   │   │   │   ├── r101_object_detection_results
-    │   │   │   │   │   ├── ENV1_train_train_pseudo_split0_detection_results.pth
-    │   │   │   │   ├── r152_attr_detection_results      
-    │   │   │   │   │   ├── ENV1_train_train_pseudo_split0_attr_detection_results.pth
-
-The results will be a dictionary of name of the image file for keys and list of each object's features for values.
+You can either detect objects by your own, but we provide the detected results (i.e., cropped object images) in `Reminiscence_nodes.zip`.
 
 <br>
 <br>
@@ -240,11 +205,48 @@ img_id: [personal indicator, bounding box coordinates]
 
 Propagation through Reminiscence
 --------------------------------------
-Since you have a generated triplet of image, location, and instructions, you can train any visual grounidng model you want. 
-Here, we provide a sample training and evaluation code of [OFA](http://arxiv.org/abs/2202.03052).
-The source code is from [OFA Github](https://github.com/OFA-Sys/OFA).
+Utilizing the information obtained from Object Information Acquisition, unlabelled images from the Reminiscence dataset are pseudo-labeled using the Propagation through Reminiscence. 
+To execute this, run the following script:
+
+```shell
+CUDA_VISIBLE_DEVICES=1 python label_propagation.py --model 'vanilla' --thresh 0.55 --iter 3 --save_nodes True --sample_n 400 --ignore_interaction True --seed 777
+```
+
+The `.pth` file will be saved that consists of a list, each element representing each object node.
+Each object nodes are a dictionary tagged with following informations:
+
+| Items  | Content | 
+| --- | --- |
+| visual feature  | 512 dimension feature vector extracted from [DINO](https://github.com/facebookresearch/dino) | 
+| category  | category of the object |
+| label  | personal indicator |
+| img_id  | Reminiscence image id |
+| obj_id  | object id |
+| known  | whether if the node is from OIA, `True` or `False` |
+| labelled  | whether if the node is labeled or not (including pseudo-labels), `True` or `False` | 
 
 
+
+
+
+<br>
+<br>
+
+
+Personalized Object Grounding Model
+--------------------------------------
+
+Our Personalized Object Grounding Model is based on [OFA](http://arxiv.org/abs/2202.03052), the state-of-the-art vision-and-language foundation model.
+
+With the triplet of image, personal indicator, and object coordinate, you can train the grounding model with the following script:
+
+
+### Training
+
+```shell
+cd run_scripts
+nohup sh train.sh
+```
 
 The pre-trained checkpoints of PGA can be found below.
 
@@ -260,12 +262,21 @@ The pre-trained checkpoints of PGA can be found below.
 | [Download]()| [Download]() | [Download]() | [Download]() |
 
 
-<br>
-<br>
+### Visualization
 
+If you have the pretrained grounding model, you can visualize the prediction results with the following script:
 
-Personalized Object Grounding Model
---------------------------------------
+```shell
+python visualization.py
+```
+
+### Evaluation
+
+You can evaluate your model on the test sets with the following script:
+
+```shell
+python evaluation.py
+```
 
 <br>
 <br>
