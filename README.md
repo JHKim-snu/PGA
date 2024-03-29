@@ -321,11 +321,20 @@ python online_experiment_server.py --demo
 Experimental Results
 --------------------------------------
 
+We assessed the Personalized Grasping Agent (PGA) on our proposed dataset, \textsc{GraspMine}, benchmarking it against various baselines.
+The offline experiment measured PGA's efficacy in Personalized Object Grounding, how well PGA identifies an object given its natural language indicators. 
+Meanwhile, the online experiment probed its real-world performance in Personalized Language-Conditioned Robotic Grasping (LCRG) using a robot arm.
+
+### Offline Experiments (Localization)
+
 <img src="readme_figures/table_offline.png" width="80%" align="middle"><br><br>
+
+
+### Online Experiments (Real-world)
 
 <img src="readme_figures/table_online.png" width="40%" align="middle"><br><br>
 
-
+Please check on our paper for more detailed explanation.
 
 
 
