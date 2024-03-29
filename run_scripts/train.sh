@@ -4,17 +4,16 @@
 # you need to specify different port numbers.
 export MASTER_PORT=6050
 
-dataset_name=propagation_ignore_from2_25_seed_888 ##########
+dataset_name= ##########
 log_dir=./logs
-save_dir=/data/jhkim/icra24/ofa_checkpoints ################
+save_dir=./checkpoints
 mkdir -p $log_dir $save_dir
 
-bpe_dir=/home/jhkim/iros23/OFA/utils/BPE
-user_dir=/home/jhkim/iros23/OFA/ofa_module
+bpe_dir=../utils/BPE
+user_dir=../ofa_module
 
-data_dir=/data/jhkim/icra24/ofa_vg_data/ofa_train_tsv/
-data=/data/jhkim/icra24/ofa_vg_data/ofa_train_tsv/propagation_ignore_from2_25_seed_888.tsv,/data/jhkim/icra24/ofa_vg_data/ofa_train_tsv/validation.tsv ###############
-restore_file=/data/jhkim/iros23/OFA_refcoco_checkpoints_0208_pick/0208_train_135/checkpoint_last.pt ##############
+data= #train .tsv data path
+restore_file= #model checkpoint path
 selected_cols=0,4,2,3
 task=refcoco
 arch=ofa_large
@@ -40,7 +39,7 @@ log_file=${log_dir}/${dataset_name}".log"
 save_path=${save_dir}/${dataset_name}/
 mkdir -p $save_path
 
-CUDA_VISIBLE_DEVICES=2,3,4,5 python3 -m torch.distributed.launch --nproc_per_node=4 --master_port=${MASTER_PORT} /home/jhkim/icra24/OFA/train_vg.py \
+CUDA_VISIBLE_DEVICES=2,3,4,5 python3 -m torch.distributed.launch --nproc_per_node=4 --master_port=${MASTER_PORT} ../train_vg.py \
     $data \
     --selected-cols=${selected_cols} \
     --bpe-dir=${bpe_dir} \

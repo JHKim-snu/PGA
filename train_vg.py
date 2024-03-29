@@ -11,7 +11,6 @@ import os
 import sys
 import wandb
 from typing import Dict, Optional, Any, List, Tuple, Callable
-os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
 # We need to setup root logger before importing any fairseq libraries.
 logging.basicConfig(
@@ -315,15 +314,9 @@ def train(
             num_updates = trainer.get_num_updates()
             if num_updates % cfg.common.log_interval == 0:
                 stats = get_training_stats(metrics.get_smoothed_values("train_inner"))
-                # for captioning
-                #wandb_log = {'training loss': stats['loss'],'nll loss': stats['nll_loss'],'ppl': stats['ppl'], 'lr': stats['lr']}
-                # for VG
                 wandb_log = {'training loss': stats['loss'],'nll loss': stats['nll_loss'], 'lr': stats['lr']}
                 wandb.log(wandb_log)
                 progress.log(stats, tag="train_inner", step=num_updates)
-
-                # reset mid-epoch stats after each log interval
-                # the end-of-epoch stats will still be preserved
                 metrics.reset_meters("train_inner")
 
         end_of_epoch = not itr.has_next()
@@ -493,9 +486,6 @@ def validate(
             stats = agg.get_smoothed_values()
         stats = get_valid_stats(cfg, trainer, stats)
         print("stats: {} .......".format(stats.keys()))
-        # for captioning
-        #wandb_log_dict_val = {'val loss': stats['loss'], 'cider': stats['cider'], 'ppl': stats['ppl']} ###########
-        # for refcoco
         wandb_log_dict_val = {'val loss': stats['loss'], 'val score':stats['score']} ###########
         wandb.log(wandb_log_dict_val)
         if hasattr(task, "post_validate"):
@@ -524,7 +514,7 @@ def get_valid_stats(
 def cli_main(
     modify_parser: Optional[Callable[[argparse.ArgumentParser], None]] = None
 ) -> None:
-    wandb.init(project='icra24', name='propagation_obj96_v0_ignore_from2_25_888')
+    wandb.init(project='project', name='name')
     global column_l_global
 
     parser = options.get_training_parser()
