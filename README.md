@@ -114,6 +114,7 @@ The reminiscence consists of 400 raw images of the environment. This raw images 
 | --- | --- |--- | --- |--- |
 | `Reminiscence.zip`  | Unlabeled images of Reminiscence | 400 | 129.4 MBytes | [Download](https://drive.google.com/file/d/1Y7W3RfHRAnQWteqhIJ8m-PfSyGLyZLhL/view?usp=sharing)|
 | `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence. All objects detected from the Object Detector are saved as a cropped image | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
+| `R_object_features.json`  | Visual features of cropped images. The features were extracted through [DINO](https://arxiv.org/abs/2304.07193) | 8270 | 124 MBytes | [Download](https://drive.google.com/file/d/1dr21Rlqe2fpW4x67Cl2TSgYYgeMeZzhy/view?usp=sharing)|
 | `Reminiscence_annotations.xlsx`  | Annotations of Reminiscence nodes. Each personal indicators are annotated with the {image_id}_{object_id} in the above `Reminiscence_nodes.zip` | 8270 | 4.4 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
 
 <br>
@@ -209,7 +210,7 @@ Utilizing the information obtained from Object Information Acquisition, unlabell
 To execute this, run the following script:
 
 ```shell
-CUDA_VISIBLE_DEVICES=1 python label_propagation.py --model 'vanilla' --thresh 0.55 --iter 3 --save_nodes True --sample_n 400 --ignore_interaction True --seed 777
+CUDA_VISIBLE_DEVICES=0 python label_propagation.py --model 'vanilla' --thresh 0.55 --iter 3 --save_nodes True --sample_n 400 --ignore_interaction True --seed 777
 ```
 
 The `.pth` file will be saved that consists of a list, each element representing each object node.
@@ -238,8 +239,16 @@ Personalized Object Grounding Model
 
 Our Personalized Object Grounding Model is based on [OFA](http://arxiv.org/abs/2202.03052), the state-of-the-art vision-and-language foundation model.
 
-With the triplet of image, personal indicator, and object coordinate, you can train the grounding model with the following script:
+You first need to post-process the training, test data to train the Grounding model.
 
+### Process Data
+
+```Shell
+python postprocess_all.py
+python postprocess_size.py
+```
+
+With the triplet of image, personal indicator, and object coordinate, you can train the grounding model with the following script:
 
 ### Training
 
@@ -253,13 +262,13 @@ The pre-trained checkpoints of PGA can be found below.
 **Baseline checkpoints**
 | OFA  | GVCCI | Direct | PassivePGA | PGA | Supervised |
 | --- | --- | --- | --- | --- | --- |
-| [Download]()| [Download]() | [Download]() | [Download]() | [Download]() | [Download]() |
+| [Download](https://github.com/OFA-Sys/OFA)| [Download](https://github.com/JHKim-snu/GVCCI/blob/main) | [Download](https://drive.google.com/file/d/1gwJc5yC82KF-X5XZMFbEPDRUKBJo69CF/view?usp=sharing) | [Download]() | [Download](https://drive.google.com/file/d/1-WHj_Sk_880KPxlGZfGpAwmzr4xfoiza/view?usp=sharing) | [Download](https://drive.google.com/file/d/1qVMopr2hK__NB5jraLi4l0dzyJsKe_dh/view?usp=sharing) |
 
 
 **PGA checkpoints**
 | 0  | 25 | 100 | 400 |
 | --- | --- | --- | --- |
-| [Download]()| [Download]() | [Download]() | [Download]() |
+| [Download](https://drive.google.com/file/d/1gwJc5yC82KF-X5XZMFbEPDRUKBJo69CF/view?usp=sharing)| [Download](https://drive.google.com/file/d/1gD-IzlkReCuKVbNjntPmbyL11nvTxa76/view?usp=sharing) | [Download](https://drive.google.com/file/d/1-7kL2tVjADrKAFds8-3i9STsV4gYDAWP/view?usp=sharing) | [Download](https://drive.google.com/file/d/1-WHj_Sk_880KPxlGZfGpAwmzr4xfoiza/view?usp=sharing) |
 
 
 ### Visualization
