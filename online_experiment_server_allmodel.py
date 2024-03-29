@@ -25,9 +25,9 @@ tasks.register_task('refcoco', RefcocoTask)
 use_cuda = torch.cuda.is_available()
 overrides={"bpe_dir":"/home/jhkim/icra24/OFA/utils/BPE"}
 
-model_path0 = '/data/jhkim/icra24/ofa_checkpoints/passive/checkpoint_best.pt'
-model_path1 = '/data/jhkim/icra24/ofa_checkpoints/propagation_ignore_from2/checkpoint_best.pt'
-model_path2 = '/data/jhkim/icra24/ofa_checkpoints/gt_ignore_from2/checkpoint_best.pt'
+model_path0 = '' # Path to Passive model checkpoint file
+model_path1 = '' # Path to PGA model checkpoint file
+model_path2 = '' # Path to Supervised model checkpoint file
 
 models0, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
         utils.split_paths(model_path0),

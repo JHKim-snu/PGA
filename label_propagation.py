@@ -1,5 +1,4 @@
 import torch
-from torch import Tensor
 import os
 from PIL import Image
 from torchvision import transforms as pth_transforms
@@ -11,22 +10,13 @@ import random
 import argparse
 import torch.nn.functional as F
 import time
-import sklearn
 import json
-
-
-
-start_time = time.time()
-
 from numpy import dot
 from numpy.linalg import norm
 
 
-def cos_sim(A, B):
-  A = A.squeeze()
-  B = B.squeeze()
-  ret = dot(A, B)/(norm(A)*norm(B))
-  return ret.item()
+start_time = time.time()
+
 
 def parse_args():
     """
@@ -47,6 +37,13 @@ def parse_args():
     return args
 
 
+def cos_sim(A, B):
+    A = A.squeeze()
+    B = B.squeeze()
+    ret = dot(A, B)/(norm(A)*norm(B))
+    return ret.item()
+
+
 class Linear(nn.Module):
     def __init__(self, in_feat_dim=768, out_feat_dim=512):
         super(Linear, self).__init__()
@@ -59,6 +56,7 @@ class Linear(nn.Module):
         x = self.fc1(x)
         return x
     
+
 def LabelPropagation(V,E,max_iter, model):
     V = V.copy()
     for i in range(max_iter):
@@ -126,7 +124,6 @@ if __name__ == '__main__':
 
         # Load the state dict normally
         state_dict = torch.load(model_path)
-
         new_state_dict = OrderedDict()
 
         for k, v in state_dict.items():
@@ -135,7 +132,6 @@ if __name__ == '__main__':
 
         # Load the parameters
         model.load_state_dict(new_state_dict)
-
         model.eval()
         model = model.to(device)
 
@@ -147,11 +143,8 @@ if __name__ == '__main__':
     elif args.model == 'full_tuning':
         model = torch.hub.load('facebookresearch/dino:main', 'dino_vitb8')
         # model.fc = nn.Linear(768,512)
-
         model_path = '' 
-
         state_dict = torch.load(model_path)
-
         new_state_dict = OrderedDict()
 
         for k, v in state_dict.items():
@@ -159,9 +152,9 @@ if __name__ == '__main__':
             new_state_dict[name] = v
 
         model.load_state_dict(new_state_dict)
-
         model.eval()
         model = model.to(device)
+
     else:
         print("no compatible model!!!!!")
         exit()
@@ -171,11 +164,8 @@ if __name__ == '__main__':
     print('start reading excel')
     xcel_path = '' # path to Reminiscence_annotations.xlsx
     xl = pd.ExcelFile(xcel_path)
-
     df = xl.parse(xl.sheet_names[0])
-
     df = df.fillna("")
-
     data_dict = {}
 
     for index, row in df.iterrows():
@@ -192,12 +182,13 @@ if __name__ == '__main__':
                 key = 'vague'
                 values = list(row[i] for i in range(4, len(row)))
                 data_dict[key] = values
+    
     print('done reading excel')
 
     #################################################
     ########### Make initial Graoh node V ###########
 
-    image_path='/data/jhkim/icra24/cropped_objects'
+    image_path='' # Path to Cropped Reminiscence Images
 
     V = []
     categories_list = []
