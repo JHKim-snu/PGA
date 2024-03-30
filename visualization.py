@@ -10,35 +10,18 @@ import os
 import cv2
 from matplotlib import pyplot as plt
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3"
 
-
-test_path = '/data/jhkim/icra24/ofa_vg_data/test_annotation/seen_random.pth'
+test_path = ''
 answer = torch.load(test_path)
 
-
-
-# Register refcoco task
 tasks.register_task('refcoco', RefcocoTask)
-
-# turn on cuda if GPU is available
 use_cuda = torch.cuda.is_available()
-# use fp16 only when GPU is available
-use_fp16 = False
-
-# Load pretrained ckpt & config
 overrides={"bpe_dir":"utils/BPE"}
 
-model_path1 = '/data/jhkim/icra24/ofa_checkpoints/propagation_ignore/checkpoint_best.pt'
-model_path2 = '/data/jhkim/icra24/ofa_checkpoints/propagation_ignore_from2/checkpoint_best.pt'
+model_path1 = ''
 
 models1, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
         utils.split_paths(model_path1),
-        arg_overrides=overrides
-    )
-
-models2, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-        utils.split_paths(model_path2),
         arg_overrides=overrides
     )
 
@@ -49,34 +32,17 @@ cfg.generation.max_len_a = 0
 cfg.generation.max_len_b = 4
 cfg.generation.no_repeat_ngram_size = 3
 
-# Fix seed for stochastic decoding
 if cfg.common.seed is not None and not cfg.generation.no_seed_provided:
     np.random.seed(cfg.common.seed)
     utils.set_torch_seed(cfg.common.seed)
 
-# Move models to GPU
 for model in models1:
     model.eval()
-    if use_fp16:
-        model.half()
     if use_cuda and not cfg.distributed_training.pipeline_model_parallel:
         model.cuda()
     model.prepare_for_inference_(cfg)
 
-for model in models2:
-    model.eval()
-    if use_fp16:
-        model.half()
-    if use_cuda and not cfg.distributed_training.pipeline_model_parallel:
-        model.cuda()
-    model.prepare_for_inference_(cfg)
-
-# Initialize generator
 generator1 = task.build_generator(models1, cfg.generation)
-generator2 = task.build_generator(models2, cfg.generation)
-
-
-
 
 # Image transform
 from torchvision import transforms
@@ -131,26 +97,16 @@ def construct_sample(image: Image, text: str):
         "region_coords": torch.randn(1, 4)
     }
     return sample
-  
-# Function to turn FP32 to FP16
-def apply_half(t):
-    if t.dtype is torch.float32:
-        return t.to(dtype=torch.half)
-    return t
 
-
-
-q = 4
-image = Image.open('/data/jhkim/icra24/raw_images/test/seen_random/{}'.format(answer[q][0]))
+q = 1
+image = Image.open('/{}'.format(answer[q][0])) # INSERT the iamge file path
 text = answer[q][2]
 gt_box = answer[q][3]
-# Construct input sample & preprocess for GPU if cuda available
 sample = construct_sample(image, text)
 sample = utils.move_to_cuda(sample) if use_cuda else sample
 
-# Run eval step for refcoco
 with torch.no_grad():
-    result, scores = eval_step(task, generator2, models2, sample)
+    result, scores = eval_step(task, generator1, models1, sample)
 
 
 img = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
