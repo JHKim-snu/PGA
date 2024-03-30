@@ -239,18 +239,18 @@ Personalized Object Grounding Model
 
 Our Personalized Object Grounding Model is based on [OFA](http://arxiv.org/abs/2202.03052), the state-of-the-art vision-and-language foundation model.
 
-You first need to post-process the training, test data to train the Grounding model.
-
 ### Process Data
+
+You first need to post-process the training, test data for the Grounding model. By running the following scripts, you can acquire datasets in `.tsv` format.
 
 ```Shell
 python postprocess_all.py
 python postprocess_size.py
 ```
 
-With the triplet of image, personal indicator, and object coordinate, you can train the grounding model with the following script:
-
 ### Training
+
+With the processed data that comprise of image, personal indicator, and object coordinate, you can train the grounding model with the following script:
 
 ```shell
 cd run_scripts
@@ -287,11 +287,32 @@ You can evaluate your model on the test sets with the following script:
 python evaluation.py
 ```
 
+for the demonstration (visualization of the inference results), run the following script:
+
+```shell
+python evaluation.py --demo
+```
+
 <br>
 <br>
 
 Personalized Object Grasping
 --------------------------------------
+
+If you want to reproduce the images of the testset and try on your own model, run the following script:
+
+```shell
+python online_experiment_server.py
+```
+
+Alongside, the code for the robot `vg_client.py` is provided.
+
+If you just want to do the demonstration of the received image from the robot and your own query:
+
+```shell
+python online_experiment_server.py --demo
+```
+
 
 <br>
 <br>
@@ -300,11 +321,20 @@ Personalized Object Grasping
 Experimental Results
 --------------------------------------
 
+We assessed the Personalized Grasping Agent (PGA) on our proposed dataset, \textsc{GraspMine}, benchmarking it against various baselines.
+The offline experiment measured PGA's efficacy in Personalized Object Grounding, how well PGA identifies an object given its natural language indicators. 
+Meanwhile, the online experiment probed its real-world performance in Personalized Language-Conditioned Robotic Grasping (LCRG) using a robot arm.
+
+### Offline Experiments (Localization)
+
 <img src="readme_figures/table_offline.png" width="80%" align="middle"><br><br>
+
+
+### Online Experiments (Real-world)
 
 <img src="readme_figures/table_online.png" width="40%" align="middle"><br><br>
 
-
+Please check on our paper for more detailed explanation.
 
 
 
