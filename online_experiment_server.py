@@ -1,4 +1,3 @@
-import sys
 import socket
 import cv2
 import numpy as np
@@ -10,11 +9,9 @@ from fairseq import utils, tasks
 from fairseq import checkpoint_utils
 from utils.eval_utils import eval_step
 from tasks.mm_tasks.refcoco import RefcocoTask
-from models.ofa import OFAModel
 from PIL import Image
 import argparse
 from torchvision import transforms
-import json
 import random
 
 parser = argparse.ArgumentParser(description='interactive learning')
@@ -22,16 +19,14 @@ parser.add_argument('--demo', default=False, action='store_true')
 args = parser.parse_args()
 
 #############################
-# Load OFA_GVCCI
+# Load model
 #############################
 
 tasks.register_task('refcoco', RefcocoTask)
 use_cuda = torch.cuda.is_available()
-overrides={"bpe_dir":"/home/jhkim/icra24/OFA/utils/BPE"}
+overrides={"bpe_dir":"../utils/BPE"}
 
-# model_path = '/data/jhkim/icra24/ofa_checkpoints/passive/checkpoint_best.pt'
-model_path = '/data/jhkim/icra24/ofa_checkpoints/propagation_ignore_from2/checkpoint_best.pt'
-# model_path = '/data/jhkim/icra24/ofa_checkpoints/gt_ignore_from2/checkpoint_best.pt'
+model_path = '' # INSERT the model path
 
 models, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
         utils.split_paths(model_path),
@@ -116,7 +111,7 @@ def construct_sample(image: Image, text: str):
 # Connect Socket
 #############################
 
-HOST = '147.47.200.155'
+HOST = '' # INSERT HOST
 PORT = 9998
 
 srv_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -128,17 +123,13 @@ print(f'Connected by: {addr}')
 
 
 #############################
-#############################
-
-
-#############################
 # Receive raw image and save
 # Send coordinates
 #############################
 
-raw_img_path = '/data/jhkim/icra24/raw_images/online_exp/'
-test_annotation_path = '/data/jhkim/icra24/ofa_vg_data/test_annotation'
-test_splits = ['seen_random', 'seen_same', 'unseen_random', 'unseen_same']
+raw_img_path = '' # path to save images
+test_annotation_path = '' # Directory where the test annotations are
+test_splits = ['heterogeneous', 'homogeneous', 'cluttered', 'paraphrased']
 
 random.seed(2023)
 for split in test_splits:
@@ -153,63 +144,48 @@ if args.demo:
         print('---------------------------------')
         print('---------------------------------')
         try:
-            while True: # do until success = 'y'
-                print('---------------------------------')
+            print('---------------------------------')
 
-                # Receive CV2 Image
-                length = int(cli_sock.recv(64).decode('utf-8'))
-                buf = b''
-                while length:
-                    newbuf = cli_sock.recv(length)
-                    buf += newbuf
-                    length -= len(newbuf)
-                print("image recieved from the robot!")
-                
-                data = np.frombuffer(base64.b64decode(buf), np.uint8)
-                cv2_img = cv2.imdecode(data, cv2.IMREAD_COLOR)
-                # save received image
-                save_image_path = raw_img_path + '{}_demo.png'.format(trial_cnt)
-                cv2.imwrite(save_image_path, cv2_img)
-                print("saving image to {} ... \n".format(save_image_path))
-                
-                
-                #############################
-                ###############vvvvvvvvvvvvvvvv################
+            # Receive CV2 Image
+            length = int(cli_sock.recv(64).decode('utf-8'))
+            buf = b''
+            while length:
+                newbuf = cli_sock.recv(length)
+                buf += newbuf
+                length -= len(newbuf)
+            print("image recieved from the robot!")
+            
+            data = np.frombuffer(base64.b64decode(buf), np.uint8)
+            cv2_img = cv2.imdecode(data, cv2.IMREAD_COLOR)
+            # save received image
+            save_image_path = raw_img_path + '{}_demo.png'.format(trial_cnt)
+            cv2.imwrite(save_image_path, cv2_img)
+            print("saving image to {} ... \n".format(save_image_path))
+            
+            #############################
+            ###############vvvvvvvvvvvvvvvv################
 
-                image = Image.open(save_image_path)
-                # crop image
-                # y_crop = 200
-                # image = image.crop((0,y_crop,image.size[0],image.size[1]))
-                # image = np.asarray(image)        
-                # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = Image.open(save_image_path)
+            text = input("insert the instruction ... ")
+            print('\n')
 
-                text = input("insert the instruction ... ")
+            # Construct input sample & preprocess for GPU if cuda available
+            sample = construct_sample(image, text)
+            sample = utils.move_to_cuda(sample) if use_cuda else sample
 
-                print('\n')
+            # Run eval step for refcoco
+            print('\n')
+            with torch.no_grad():
+                result, scores = eval_step(task, generator, models, sample)
 
-                # Construct input sample & preprocess for GPU if cuda available
-                sample = construct_sample(image, text)
-                sample = utils.move_to_cuda(sample) if use_cuda else sample
+            # Tmp bbox info
+            xtl_pick, ytl_pick, xbr_pick, ybr_pick = result[0]["box"][0], result[0]["box"][1], result[0]["box"][2], result[0]["box"][3]
 
-                # Run eval step for refcoco
-                print('\n')
-                with torch.no_grad():
-                    result, scores = eval_step(task, generator, models, sample)
+            bbox_info = f'{xtl_pick};{ytl_pick};{xbr_pick};{ybr_pick}'
+            print(f'Send {bbox_info}\n')
+            cli_sock.send(bbox_info.encode())
 
-                # Tmp bbox info
-                xtl_pick, ytl_pick, xbr_pick, ybr_pick = result[0]["box"][0], result[0]["box"][1], result[0]["box"][2], result[0]["box"][3]
-
-                bbox_info = f'{xtl_pick};{ytl_pick};{xbr_pick};{ybr_pick}'
-                print(f'Send {bbox_info}\n')
-                cli_sock.send(bbox_info.encode())
-                
-                redo = input("y if redo, else press any key... ")
-                if redo == 'y':
-                    print("redo trial {}... \n".format(trial_cnt))
-                    continue
-
-                trial_cnt += 1
-                break 
+            trial_cnt += 1
 
             ###############AAAAAAAAAAAAAAAAAA################
             #############################
@@ -229,66 +205,48 @@ else:
             print('test split: {}'.format(split))
             for anw in globals()[f'{split}']:
                 try:
-                    while True: # do until success = 'y'
-                        print('---------------------------------')
-                        print('trial {}'.format(trial_cnt))
-                        print('image id: {}'.format(anw[0]))
+                    print('---------------------------------')
+                    print('trial {}'.format(trial_cnt))
+                    print('image id: {}'.format(anw[0]))
 
-                        # Receive CV2 Image
-                        length = int(cli_sock.recv(64).decode('utf-8'))
-                        buf = b''
-                        while length:
-                            newbuf = cli_sock.recv(length)
-                            buf += newbuf
-                            length -= len(newbuf)
-                        print("image recieved from the robot!")
-                        
-                        data = np.frombuffer(base64.b64decode(buf), np.uint8)
-                        cv2_img = cv2.imdecode(data, cv2.IMREAD_COLOR)
-                        # save received image
-                        save_image_path = raw_img_path + '{}.png'.format(trial_cnt)
-                        cv2.imwrite(save_image_path, cv2_img)
-                        print("saving image to {} ... \n".format(save_image_path))
-                        
-                        
-                        #############################
-                        ###############vvvvvvvvvvvvvvvv################
+                    # Receive CV2 Image
+                    length = int(cli_sock.recv(64).decode('utf-8'))
+                    buf = b''
+                    while length:
+                        newbuf = cli_sock.recv(length)
+                        buf += newbuf
+                        length -= len(newbuf)
+                    print("image recieved from the robot!")
+                    
+                    data = np.frombuffer(base64.b64decode(buf), np.uint8)
+                    cv2_img = cv2.imdecode(data, cv2.IMREAD_COLOR)
+                    # save received image
+                    save_image_path = raw_img_path + '{}.png'.format(trial_cnt)
+                    cv2.imwrite(save_image_path, cv2_img)
+                    print("saving image to {} ... \n".format(save_image_path))
 
-                        image = Image.open(save_image_path)
-                        # crop image
-                        # y_crop = 200
-                        # image = image.crop((0,y_crop,image.size[0],image.size[1]))
-                        # image = np.asarray(image)        
-                        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                    image = Image.open(save_image_path)
+                    text = anw[2]
+                    print('\n')
 
-                        text = anw[2]
+                    # Construct input sample & preprocess for GPU if cuda available
+                    sample = construct_sample(image, text)
+                    sample = utils.move_to_cuda(sample) if use_cuda else sample
 
-                        print('\n')
+                    # Run eval step for refcoco
+                    print('\n')
+                    with torch.no_grad():
+                        result, scores = eval_step(task, generator, models, sample)
+                        print("inferring with ...'{}'\n".format(text))
 
-                        # Construct input sample & preprocess for GPU if cuda available
-                        sample = construct_sample(image, text)
-                        sample = utils.move_to_cuda(sample) if use_cuda else sample
+                    # Tmp bbox info
+                    xtl_pick, ytl_pick, xbr_pick, ybr_pick = result[0]["box"][0], result[0]["box"][1], result[0]["box"][2], result[0]["box"][3]
 
-                        # Run eval step for refcoco
-                        print('\n')
-                        with torch.no_grad():
-                            result, scores = eval_step(task, generator, models, sample)
-                            print("OFA inferring with ...'{}'\n".format(text))
-
-                        # Tmp bbox info
-                        xtl_pick, ytl_pick, xbr_pick, ybr_pick = result[0]["box"][0], result[0]["box"][1], result[0]["box"][2], result[0]["box"][3]
-
-                        bbox_info = f'{xtl_pick};{ytl_pick};{xbr_pick};{ybr_pick}'
-                        print(f'Send {bbox_info}\n')
-                        cli_sock.send(bbox_info.encode())
-                        
-                        redo = input("y if redo, else press any key... ")
-                        if redo == 'y':
-                            print("redo trial {}... \n".format(trial_cnt))
-                            continue
-
-                        trial_cnt += 1
-                        break 
+                    bbox_info = f'{xtl_pick};{ytl_pick};{xbr_pick};{ybr_pick}'
+                    print(f'Send {bbox_info}\n')
+                    cli_sock.send(bbox_info.encode())
+                    
+                    trial_cnt += 1
 
                     ###############AAAAAAAAAAAAAAAAAA################
                     #############################
