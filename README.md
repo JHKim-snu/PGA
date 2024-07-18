@@ -6,7 +6,7 @@
   
 **[Junghyun Kim][4], &nbsp; [Gi-Cheon Kang][3]<sup>\*</sup>, &nbsp; [Jaein Kim][5]<sup>\*</sup>, &nbsp; [Seoyun Yang][1], &nbsp; [Minjoon Jung][9], &nbsp; [Byoung-Tak Zhang][6]** <br>
 
-**[Submitted to The 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2024)][2]**
+**[The 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2024)][2]**
 </div>
 
 <h3 align="center">
