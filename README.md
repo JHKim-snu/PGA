@@ -115,7 +115,7 @@ The reminiscence consists of 400 raw images of the environment. This raw images 
 | `Reminiscence.zip`  | Unlabeled images of Reminiscence | 400 | 129.4 MBytes | [Download](https://drive.google.com/file/d/1Y7W3RfHRAnQWteqhIJ8m-PfSyGLyZLhL/view?usp=sharing)|
 | `Reminiscence_nodes.zip`  | Cropped object images of Reminiscence. All objects detected from the Object Detector are saved as a cropped image | 8270 | 61 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
 | `R_object_features.json`  | Visual features of cropped images. The features were extracted through [DINO](https://arxiv.org/abs/2304.07193) | 8270 | 124 MBytes | [Download](https://drive.google.com/file/d/1dr21Rlqe2fpW4x67Cl2TSgYYgeMeZzhy/view?usp=sharing)|
-| `Reminiscence_annotations.xlsx`  | Annotations of Reminiscence nodes. Each personal indicators are annotated with the {image_id}_{object_id} in the above `Reminiscence_nodes.zip` | 8270 | 4.4 MBytes | [Download](https://drive.google.com/file/d/1Y8YSS_4gAArQp94Ef9GhSaz18P0rBO2B/view?usp=sharing)|
+| `Reminiscence_annotations.xlsx`  | Annotations of Reminiscence nodes. Each personal indicators are annotated with the {image_id}_{object_id} in the above `Reminiscence_nodes.zip` | 8270 | 4.4 MBytes | [Download](https://docs.google.com/spreadsheets/d/1FmbjTMozBhl9jpz_PSAz21vrNaEG4rDP/edit?usp=sharing&ouid=114809787991544027535&rtpof=true&sd=true)|
 
 <br>
 
